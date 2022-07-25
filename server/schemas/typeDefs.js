@@ -3,6 +3,14 @@ const { gql } = require('apollo-server-express');
 
 // create our typeDefs
 const typeDefs = gql`
+  type User {
+    _id: ID
+    username: String
+    email: String
+    friendCount: Int
+    thoughts: [Thought]
+    friends: [User]
+  }
 
   type Thought {
     _id: ID
@@ -20,59 +28,30 @@ const typeDefs = gql`
     username: String
   }
 
-  type User {
-    _id: ID
-    username: String
-    email: String
-    friendCount: Int
-    thoughts: [Thought]
-    friends: [User]
+  type Query {
+    me: User
+    users: [User]
+    user(username: String!): User
+    thoughts(username: String): [Thought]
+    thought(_id: ID!): Thought
   }
 
-  query {
-    # get all users
-    users {
-      username
-      email
-    }
-  
-    # get a single user by username (use a username from your database)
-    user(username: "<username-goes-here>") {
-      username
-      email
-      friendCount
-      thoughts {
-        thoughtText
-      }
-      friends {
-        username
-      }
-    }
-  
-    # query all thoughts
-    thoughts {
-      _id
-      username
-      thoughtText
-      reactions {
-        _id
-        createdAt
-        username
-        reactionBody
-      }
-    }
-  
-    # query a single thought (use an _id from a thought in your database)
-    thought(_id: "<thought-id-here>") {
-      _id
-      username
-      thoughtText
-      createdAt
-      reactions {
-        username
-        reactionBody
-      }
-    }
+  type Mutation {
+    login(email: String!, password: String!): User
+    addUser(username: String!, email: String!, password: String!): User
+  }
+
+  type Auth {
+    token: ID!
+    user: User
+  }
+
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    addThought(thoughtText: String!): Thought
+    addReaction(thoughtId: ID!, reactionBody: String!): Thought
+    addFriend(friendId: ID!): User
   }
 `;
 
