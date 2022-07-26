@@ -22,5 +22,8 @@
   "homepage": "https://github.com/TessShearer/deep-thoughts#readme",
   "devDependencies": {
     "concurrently": "^7.3.0"
+  },
+  "dependencies": {
+    "react-router-dom": "^6.3.0"
   }
 }
